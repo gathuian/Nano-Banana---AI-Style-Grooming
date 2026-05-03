@@ -30,7 +30,10 @@ const BottomNav: React.FC<BottomNavProps> = ({ active }) => {
           <Wand2 size={24} />
           <span className="text-[10px] font-bold uppercase">Tools</span>
         </button>
-        <button className="flex flex-col items-center gap-1 text-gray-400">
+        <button 
+          onClick={() => navigate('/profile')}
+          className={`flex flex-col items-center gap-1 ${active === 'profile' ? 'text-primary' : 'text-gray-400'}`}
+        >
           <User size={24} />
           <span className="text-[10px] font-bold uppercase">Profile</span>
         </button>

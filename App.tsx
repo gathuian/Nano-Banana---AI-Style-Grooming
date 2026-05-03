@@ -2,18 +2,28 @@
 import React, { useState } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence, motion } from 'motion/react';
+import { UserPreference, GenerationResult } from './types';
 import OnboardingScreen from './screens/OnboardingScreen';
 import QuizScreen from './screens/QuizScreen';
 import ScanScreen from './screens/ScanScreen';
 import ResultsScreen from './screens/ResultsScreen';
 import DetailsScreen from './screens/DetailsScreen';
 import ExploreScreen from './screens/ExploreScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 const AnimatedRoutes = () => {
   const location = useLocation();
-  const [userVibe, setUserVibe] = useState('classic');
-  const [analysisResult, setAnalysisResult] = useState<any>(null);
+  const [userPrefs, setUserPrefs] = useState<UserPreference>({
+    vibe: 'classic',
+    species: 'Human',
+    gender: 'Neutral'
+  });
+  const [analysisResults, setAnalysisResults] = useState<GenerationResult[]>([]);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
+
+  const updatePrefs = (newPrefs: Partial<UserPreference>) => {
+    setUserPrefs(prev => ({ ...prev, ...newPrefs }));
+  };
 
   return (
     <AnimatePresence mode="wait">
@@ -28,7 +38,7 @@ const AnimatedRoutes = () => {
           path="/quiz" 
           element={
             <motion.div initial={{ x: 20, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: -20, opacity: 0 }} transition={{ duration: 0.3 }}>
-              <QuizScreen onSelectVibe={setUserVibe} currentVibe={userVibe} />
+              <QuizScreen onUpdatePrefs={updatePrefs} currentPrefs={userPrefs} />
             </motion.div>
           } 
         />
@@ -36,10 +46,14 @@ const AnimatedRoutes = () => {
           path="/scan" 
           element={
             <motion.div initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
-              <ScanScreen vibe={userVibe} onAnalysisComplete={(res, img) => {
-                setAnalysisResult(res);
-                setCapturedImage(img);
-              }} />
+              <ScanScreen 
+                prefs={userPrefs} 
+                setPrefs={updatePrefs}
+                onAnalysisComplete={(res, img) => {
+                  setAnalysisResults(res);
+                  setCapturedImage(img);
+                }} 
+              />
             </motion.div>
           } 
         />
@@ -47,7 +61,11 @@ const AnimatedRoutes = () => {
           path="/results" 
           element={
             <motion.div initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: -20, opacity: 0 }} transition={{ duration: 0.3 }}>
-              <ResultsScreen results={analysisResult} capturedImage={capturedImage} />
+              <ResultsScreen 
+                results={analysisResults} 
+                capturedImage={capturedImage} 
+                prefs={userPrefs}
+              />
             </motion.div>
           } 
         />
@@ -62,6 +80,11 @@ const AnimatedRoutes = () => {
         <Route path="/explore" element={
            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
              <ExploreScreen />
+           </motion.div>
+        } />
+        <Route path="/profile" element={
+           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3 }}>
+             <ProfileScreen />
            </motion.div>
         } />
       </Routes>
