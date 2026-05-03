@@ -1,0 +1,8 @@
+{
+  "name": "Nano Banana - AI Style & Grooming",
+  "description": "An AI-powered grooming and style analysis application for humans and pets, providing tailored hair and style recommendations.",
+  "requestFramePermissions": [
+    "camera"
+  ],
+  "majorCapabilities": []
+}

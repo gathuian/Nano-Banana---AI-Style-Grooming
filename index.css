@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Noto+Sans:wght@400;700&display=swap');
+
+:root {
+  --primary: #f4d125;
+  --background-light: #f8f8f5;
+  --background-dark: #181711;
+  --surface-dark: #221f10;
+}
+
+body {
+  font-family: 'Space Grotesk', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+.banana-glow {
+  box-shadow: 0 0 40px rgba(244, 209, 37, 0.15);
+}
+
+.scan-overlay {
+  background: radial-gradient(circle, transparent 150px, rgba(24, 23, 17, 0.7) 100%);
+}
+
+@keyframes scan-line {
+  0% { top: 20%; }
+  100% { top: 80%; }
+}
+
+.animate-scan {
+  animation: scan-line 2s infinite alternate ease-in-out;
+}
+
+/* Page transitions */
+.page-enter {
+  opacity: 0;
+  transform: translateY(10px);
+}
+.page-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 300ms, transform 300ms;
+}
+.page-exit {
+  opacity: 1;
+}
+.page-exit-active {
+  opacity: 0;
+  transition: opacity 300ms;
+}
